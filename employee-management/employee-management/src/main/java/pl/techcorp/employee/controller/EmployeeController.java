@@ -41,7 +41,6 @@ public class EmployeeController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         
-        // Ustaw ID w obiekcie person przed aktualizacją
         person.setId(id);
         
         employeeService.updateEmployee(id, person);

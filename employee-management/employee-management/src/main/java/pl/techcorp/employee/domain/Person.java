@@ -7,7 +7,6 @@ public class Person {
     private String company;
     private String country;
 
-    // Gettery i settery
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
     public String getFirstName() { return firstName; }
@@ -19,7 +18,6 @@ public class Person {
     public String getCountry() { return country; }
     public void setCountry(String country) { this.country = country; }
 
-    // Konstruktor
     public Person(int id, String firstName, String lastName, String company, String country) {
         this.id = id;
         this.firstName = firstName;
