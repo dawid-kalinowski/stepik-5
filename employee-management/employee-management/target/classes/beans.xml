@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+            http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="president" class="pl.techcorp.employee.domain.Person">
+        <property name="firstName" value="Chrystal"/>
+        <property name="lastName" value="Havoc"/>
+        <property name="email" value="chavocr@yahoo.com"/>
+        <property name="company" value="Mymm"/>
+    </bean>
+
+    <bean id="vicePresident" class="pl.techcorp.employee.domain.Person">
+        <property name="firstName" value="Halley"/>
+        <property name="lastName" value="Gadaud"/>
+        <property name="email" value="hgadaud9@sohu.com"/>
+        <property name="company" value="Oyope"/>
+    </bean>
+
+    <bean id="secretary" class="pl.techcorp.employee.domain.Person">
+        <property name="firstName" value="Kirbie"/>
+        <property name="lastName" value="Wrettum"/>
+        <property name="email" value="kwrettumj@slideshare.net"/>
+        <property name="company" value="Browsetype"/>
+    </bean>
+
+</beans>

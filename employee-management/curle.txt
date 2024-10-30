@@ -1,0 +1,15 @@
+http://localhost:8080/api/employees
+
+
+http://localhost:8080/api/employees/4
+
+
+curl -X POST http://localhost:8080/api/employees -H "Content-Type: application/json" -d '{"id": 6, "firstName": "Alice", "lastName": "Wonderland", "company": "TechCorp", "country": "USA"}'
+
+
+
+curl -X PUT http://localhost:8080/api/employees/8 -H "Content-Type: application/json" -d '{"firstName": "Alicia", "lastName": "Wonderland", "company": "TechCorp", "country": "Canada"}'
+
+
+
+curl -X DELETE http://localhost:8080/api/employees/6
