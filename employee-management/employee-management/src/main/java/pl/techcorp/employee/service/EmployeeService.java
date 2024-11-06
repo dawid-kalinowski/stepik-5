@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import pl.techcorp.employee.domain.Person;
+import pl.techcorp.employee.exception.EmployeeNotFoundException;
 
 import javax.annotation.PostConstruct;
 import java.io.BufferedReader;
@@ -11,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EmployeeService {
@@ -28,7 +30,7 @@ public class EmployeeService {
         try (BufferedReader br = new BufferedReader(
                 new InputStreamReader(resourceLoader.getResource("classpath:MOCK_DATA.csv").getInputStream()))) {
             String line;
-            br.readLine(); // pomiń nagłówek
+            br.readLine(); 
             while ((line = br.readLine()) != null) {
                 String[] fields = line.split(",");
                 int id = Integer.parseInt(fields[0]);
@@ -48,25 +50,37 @@ public class EmployeeService {
     }
 
     public Person getEmployeeById(int id) {
-        return employees.stream().filter(emp -> emp.getId() == id).findFirst().orElse(null);
+        return employees.stream()
+                .filter(emp -> emp.getId() == id)
+                .findFirst()
+                .orElseThrow(() -> new EmployeeNotFoundException(id));  
     }
 
     public void addEmployee(Person person) {
+        if (employees.stream().anyMatch(emp -> emp.getId() == person.getId())) {
+            throw new IllegalArgumentException("Pracownik o ID " + person.getId() + " już istnieje");
+        }
         employees.add(person);
     }
 
-public void updateEmployee(int id, Person person) {
-    for (int i = 0; i < employees.size(); i++) {
-        if (employees.get(i).getId() == id) {
-            // Ustaw ID na aktualizowanym obiekcie
-            person.setId(id); // Ustaw ID na id aktualizowanego pracownika
-            employees.set(i, person);
-            return;
+    public void updateEmployee(int id, Person person) {
+        Optional<Person> existingEmployee = employees.stream()
+                .filter(emp -> emp.getId() == id)
+                .findFirst();
+
+        if (existingEmployee.isEmpty()) {
+            throw new EmployeeNotFoundException(id); 
         }
+
+
+        person.setId(id);
+        employees.set(employees.indexOf(existingEmployee.get()), person);
     }
-}
 
     public void deleteEmployee(int id) {
-        employees.removeIf(emp -> emp.getId() == id);
+        boolean removed = employees.removeIf(emp -> emp.getId() == id);
+        if (!removed) {
+            throw new EmployeeNotFoundException(id);
+        }
     }
 }
