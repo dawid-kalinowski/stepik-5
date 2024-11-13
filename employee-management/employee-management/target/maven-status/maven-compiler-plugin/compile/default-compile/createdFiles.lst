@@ -1,5 +1,6 @@
+pl/techcorp/employee/exception/GlobalExceptionHandler.class
+pl/techcorp/employee/domain/Person.class
+pl/techcorp/employee/exception/EmployeeNotFoundException.class
 pl/techcorp/employee/controller/EmployeeController.class
 pl/techcorp/employee/EmployeeApplication.class
-pl/techcorp/employee/domain/Person.class
 pl/techcorp/employee/service/EmployeeService.class
-pl/techcorp/employee/exception/EmployeeNotFoundException.class

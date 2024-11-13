@@ -2,63 +2,94 @@ package pl.techcorp.employee.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pl.techcorp.employee.domain.Person;
 import pl.techcorp.employee.exception.EmployeeNotFoundException;
 import pl.techcorp.employee.service.EmployeeService;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
-@RestController
-@RequestMapping("/api/employees")
+@Controller
+@RequestMapping("/employees")
 public class EmployeeController {
 
     @Autowired
     private EmployeeService employeeService;
 
-    @GetMapping
+    // Wyświetlanie listy wszystkich pracowników
+    @GetMapping("/employees")
+    public String viewEmployees(Model model) {
+        List<Person> employees = employeeService.getAllEmployees();
+        
+        // Przekazanie listy pracowników do modelu
+        model.addAttribute("employees", employees);
+        
+        // Całkowita liczba pracowników
+        model.addAttribute("totalEmployees", employees.size());
+        
+        // Lista krajów do rozwijanego menu (dropdown)
+        List<String> countries = employees.stream()
+            .map(Person::getCountry)
+            .distinct()
+            .collect(Collectors.toList());
+        model.addAttribute("countries", countries);
+
+        // Podział sumy wynagrodzeń na waluty (przykład)
+        Map<String, Double> totalSalariesByCurrency = employeeService.getTotalSalariesByCurrency();
+        model.addAttribute("totalSalariesByCurrency", totalSalariesByCurrency);
+
+        return "employees"; // Widok strony głównej
+    }
+
+    // Wyświetlanie szczegółów konkretnego pracownika
+    @GetMapping("/employees/{id}")
+    public String viewEmployeeDetails(@PathVariable int id, Model model) {
+        Person employee = employeeService.getEmployeeById(id);
+        if (employee == null) {
+            throw new EmployeeNotFoundException(id);
+        }
+        model.addAttribute("employee", employee);
+        return "employee-details"; // Widok szczegółów pracownika
+    }
+
+    // API - pobieranie wszystkich pracowników
+    @GetMapping("/api")
+    @ResponseBody
     public List<Person> getAllEmployees() {
         return employeeService.getAllEmployees();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Person> getEmployeeById(@PathVariable int id) {
-        try {
-            Person person = employeeService.getEmployeeById(id);
-            return new ResponseEntity<>(person, HttpStatus.OK);
-        } catch (EmployeeNotFoundException e) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        }
+    // API - pobieranie pracownika po ID
+    @GetMapping("/api/{id}")
+    @ResponseBody
+    public Person getEmployeeById(@PathVariable int id) {
+        return employeeService.getEmployeeById(id);
     }
 
-    @PostMapping
-    public ResponseEntity<?> addEmployee(@RequestBody Person person) {
-        try {
-            employeeService.addEmployee(person);
-            return new ResponseEntity<>(person, HttpStatus.CREATED);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
+    // API - dodawanie pracownika
+    @PostMapping("/api")
+    @ResponseBody
+    public Person addEmployee(@RequestBody Person person) {
+        employeeService.addEmployee(person);
+        return person;
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateEmployee(@PathVariable int id, @RequestBody Person person) {
-        try {
-            employeeService.updateEmployee(id, person);
-            return new ResponseEntity<>(person, HttpStatus.OK);
-        } catch (EmployeeNotFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
+    // API - aktualizacja danych pracownika
+    @PutMapping("/api/{id}")
+    @ResponseBody
+    public Person updateEmployee(@PathVariable int id, @RequestBody Person person) {
+        employeeService.updateEmployee(id, person);
+        return person;
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteEmployee(@PathVariable int id) {
-        try {
-            employeeService.deleteEmployee(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (EmployeeNotFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
+    // API - usuwanie pracownika
+    @DeleteMapping("/api/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteEmployee(@PathVariable int id) {
+        employeeService.deleteEmployee(id);
     }
 }

@@ -2,4 +2,5 @@
 /mnt/d/stepik-5/employee-management/employee-management/src/main/java/pl/techcorp/employee/controller/EmployeeController.java
 /mnt/d/stepik-5/employee-management/employee-management/src/main/java/pl/techcorp/employee/EmployeeApplication.java
 /mnt/d/stepik-5/employee-management/employee-management/src/main/java/pl/techcorp/employee/domain/Person.java
+/mnt/d/stepik-5/employee-management/employee-management/src/main/java/pl/techcorp/employee/exception/GlobalExceptionHandler.java
 /mnt/d/stepik-5/employee-management/employee-management/src/main/java/pl/techcorp/employee/service/EmployeeService.java

@@ -6,13 +6,16 @@ import org.springframework.stereotype.Service;
 import pl.techcorp.employee.domain.Person;
 import pl.techcorp.employee.exception.EmployeeNotFoundException;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 
 @Service
 public class EmployeeService {
@@ -30,7 +33,7 @@ public class EmployeeService {
         try (BufferedReader br = new BufferedReader(
                 new InputStreamReader(resourceLoader.getResource("classpath:MOCK_DATA.csv").getInputStream()))) {
             String line;
-            br.readLine(); 
+            br.readLine(); // Skip header line
             while ((line = br.readLine()) != null) {
                 String[] fields = line.split(",");
                 int id = Integer.parseInt(fields[0]);
@@ -38,12 +41,29 @@ public class EmployeeService {
                 String lastName = fields[2];
                 String company = fields[3];
                 String country = fields[4];
-                employees.add(new Person(id, firstName, lastName, company, country));
+                double salary = Double.parseDouble(fields[5]);
+                String currency = fields[6]; // Read the currency from the CSV
+
+                employees.add(new Person(id, firstName, lastName, company, country, salary, currency));
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+
+    public Map<String, Double> getTotalSalariesByCurrency() {
+    List<Person> employees = getAllEmployees(); // Pobierz wszystkich pracowników
+    
+    // Grupowanie pracowników po walucie i sumowanie ich wynagrodzeń
+    return employees.stream()
+            .collect(Collectors.groupingBy(
+                    Person::getCurrency, // Grupa po walucie
+                    Collectors.summingDouble(Person::getSalary) // Sumowanie wynagrodzeń
+            ));
+}
+
+
 
     public List<Person> getAllEmployees() {
         return employees;

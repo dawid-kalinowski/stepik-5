@@ -1,6 +1,6 @@
-id,firstName,lastName,company,country
-1,John,Doe,TechCorp,Poland
-2,Jane,Smith,TechCorp,USA
-3,Emily,Davis,Global Inc.,Canada
-4,Michael,Brown,TechCorp,UK
-5,Sarah,Johnson,Global Inc.,Australia
+id,firstName,lastName,company,country,salary,currency
+1,John,Doe,TechCorp,Poland,55000,PLN
+2,Jane,Smith,TechCorp,USA,60000,USD
+3,Emily,Davis,Global Inc.,Canada,65000,CAD
+4,Michael,Brown,TechCorp,UK,57000,GBP
+5,Sarah,Johnson,Global Inc.,Australia,68000,AUD

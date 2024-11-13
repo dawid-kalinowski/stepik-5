@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Employee List</title>
+    <th:block th:include="fragments :: header"></th:block>
+</head>
+<body>
+    <header th:fragment="header">
+        <h1>Lista Pracowników</h1>
+        <p>Całkowita liczba pracowników: <span th:text="${totalEmployees}"></span></p>
+    </header>
+
+    <section>
+        <label for="countryFilter">Filtruj według kraju:</label>
+        <select id="countryFilter" name="country" th:onchange="window.location.href='/employees?country=' + this.value">
+            <option value="">Wszystkie kraje</option>
+            <option th:each="country : ${countries}" th:value="${country}" th:text="${country}"></option>
+        </select>
+    </section>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Imię</th>
+                <th>Nazwisko</th>
+                <th>Email</th>
+                <th>Wynagrodzenie</th>
+                <th>Waluta</th>
+                <th>Kraj</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="employee : ${employees}">
+                <td th:text="${employee.firstName}">Imię</td>
+                <td th:text="${employee.lastName}">Nazwisko</td>
+                <td><a th:href="@{/employees/{id}(id=${employee.id})}" th:text="${employee.email}">Email</a></td>
+                <td th:text="${employee.salary}">Wynagrodzenie</td>
+                <td th:text="${employee.currency}">Waluta</td>
+                <td th:text="${employee.country}">Kraj</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <section>
+        <h3>Suma wynagrodzeń według waluty:</h3>
+        <ul>
+            <li th:each="entry : ${totalSalariesByCurrency}">
+                <span th:text="${entry.key}">Waluta</span>: <span th:text="${entry.value}">0</span>
+            </li>
+        </ul>
+    </section>
+
+    <th:block th:include="fragments :: footer"></th:block>
+</body>
+</html>

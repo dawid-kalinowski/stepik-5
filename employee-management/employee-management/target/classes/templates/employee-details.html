@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Szczegóły Pracownika</title>
+    <th:block th:include="fragments :: header"></th:block>
+</head>
+<body>
+    <header th:fragment="header">
+        <h1>Szczegóły Pracownika</h1>
+    </header>
+
+    <section>
+        <p>Imię: <span th:text="${employee.firstName}"></span></p>
+        <p>Nazwisko: <span th:text="${employee.lastName}"></span></p>
+        <p>Email: <span th:text="${employee.email}"></span></p>
+        <p>Wynagrodzenie: <span th:text="${employee.salary}"></span> <span th:text="${employee.currency}"></span></p>
+        <p>Kraj: <span th:text="${employee.country}"></span></p>
+    </section>
+
+    <button onclick="window.location.href='/employees'">Powrót do listy</button>
+
+    <th:block th:include="fragments :: footer"></th:block>
+</body>
+</html>
